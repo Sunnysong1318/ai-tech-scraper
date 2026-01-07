@@ -81,7 +81,7 @@ def analyze_news(url: str = Query(..., description="要分析的新聞網址")):
         print(f"後端報錯: {str(e)}")
         raise HTTPException(status_code=500, detail=f"伺服器內部錯誤: {str(e)}")
 
-# 這是為了讓你可以直接 python main.py 執行 (可選)
+# 直接 python main.py 執行
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8000)
