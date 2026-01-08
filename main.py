@@ -12,6 +12,24 @@ load_dotenv()
 app = FastAPI(title="AI News Scraper Service")
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+
+# 設定樣板目錄
+templates = Jinja2Templates(directory="templates")
+
+# 修改原有的首頁路徑
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    # 回傳 templates 資料夾下的 index.html
+    return templates.TemplateResponse("index.html", {"request": request})
+
+# ... 原有的 /analyze 接口保持不變 ...
+
+
+
+
 def perform_sync_scrape(url: str):
     """
     使用同步模式執行 Playwright 爬蟲，這是 Windows 上最穩定的解決方案

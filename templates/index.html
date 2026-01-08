@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="data:,">
+    <title>AI 科技新聞分析助手</title>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 50px auto; line-height: 1.6; padding: 20px; background-color: #f4f7f6; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; }
+        input[type="text"] { width: 80%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 16px; }
+        button { padding: 12px 25px; background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #2980b9; }
+        #result { margin-top: 30px; padding: 20px; border-left: 5px solid #3498db; background: #f9f9f9; display: none; }
+        .loading { display: none; color: #7f8c8d; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AI 網頁分析助手</h1>
+        <div style="text-align: center;">
+            <input type="text" id="urlInput" placeholder="請貼上新聞網址 (例如: https://...)">
+            <button onclick="analyze()">開始分析</button>
+        </div>
+        <p class="loading" id="loading">AI 正在努力閱讀中，請稍候約 10 秒...</p>
+        <div id="result">
+            <h2 id="resTitle"></h2>
+            <p id="resSummary"></p>
+        </div>
+    </div>
+
+    <script>
+        async function analyze() {
+            const url = document.getElementById('urlInput').value;
+            if (!url) return alert('請先輸入網址！');
+
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+
+            try {
+                // 呼叫你昨天寫好的 FastAPI 接口
+                const response = await fetch(`/analyze?url=${encodeURIComponent(url)}`);
+                const json = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('resTitle').innerText = json.metadata.title;
+                document.getElementById('resSummary').innerText = json.ai_analysis;
+            } catch (error) {
+                alert('分析失敗，請檢查網址或後端狀態');
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
